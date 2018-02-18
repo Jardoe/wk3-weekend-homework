@@ -21,14 +21,42 @@ class Ticket
     @id = ticket['id'].to_i
   end
 
+  def customer ()
+    sql = "SELECT *
+    FROM customers
+    WHERE id = $1"
+    values = [@customer_id]
+    customer = SqlRunner.run(sql, values).first
+    return Customer.new(customer)
+  end
+
+  def Ticket.count_customers(film_name)
+    sql = "
+    SELECT films.title, COUNT(Tickets.id)
+    AS NumberOfCustomers From tickets
+    LEFT JOIN films ON Tickets.film_id = films.id
+    WHERE films.title = $1
+    GROUP BY title;"
+    values = [film_name]
+    numbers = SqlRunner.run(sql,values).first()
+    return numbers
+  end
+
+  def film ()
+    sql = "SELECT * FROM films WHERE id =$1"
+    values = [@film_id]
+    return Film.new(SqlRunner.run(sql, values).first())
+  end
+
 
   def Ticket.all()
     sql = "SELECT * FROM tickets"
     values = []
     tickets = SqlRunner.run(sql, values)
     return tickets.map { |ticket| Ticket.new(ticket)  }
-
   end
+
+
 
   def Ticket.delete_all()
     sql = "DELETE FROM tickets"
