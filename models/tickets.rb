@@ -30,24 +30,21 @@ class Ticket
     return Customer.new(customer)
   end
 
-  def Ticket.count_customers(film_name)
-    sql = "
-    SELECT films.title, COUNT(Tickets.id)
-    AS NumberOfCustomers From tickets
-    LEFT JOIN films ON Tickets.film_id = films.id
-    WHERE films.title = $1
-    GROUP BY title;"
-    values = [film_name]
-    numbers = SqlRunner.run(sql,values).first()
-    return numbers
-  end
-
   def film ()
     sql = "SELECT * FROM films WHERE id =$1"
     values = [@film_id]
     return Film.new(SqlRunner.run(sql, values).first())
   end
 
+    def Ticket.count_customers()
+      sql = "
+      SELECT films.title, COUNT(Tickets.id)
+      AS NumberOfCustomers From tickets
+      LEFT JOIN films ON Tickets.film_id = films.id
+      GROUP BY title;"
+      numbers = SqlRunner.run(sql)
+      return numbers.values
+    end
 
   def Ticket.all()
     sql = "SELECT * FROM tickets"
@@ -55,7 +52,6 @@ class Ticket
     tickets = SqlRunner.run(sql, values)
     return tickets.map { |ticket| Ticket.new(ticket)  }
   end
-
 
 
   def Ticket.delete_all()
