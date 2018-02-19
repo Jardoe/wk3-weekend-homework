@@ -38,9 +38,9 @@ class Customer
   end
 
   def film_number()
-    sql = " SELECT COUNT(*) FROM tickets
+    sql = " SELECT COUNT(id) FROM tickets
     WHERE customer_id = $1;"
-    values = [@customer_id]
+    values = [@id]
     return SqlRunner.run(sql,values).first()
   end
 

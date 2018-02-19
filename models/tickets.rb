@@ -36,15 +36,15 @@ class Ticket
     return Film.new(SqlRunner.run(sql, values).first())
   end
 
-    def Ticket.count_customers()
-      sql = "
-      SELECT films.title, COUNT(Tickets.id)
-      AS NumberOfCustomers From tickets
-      LEFT JOIN films ON Tickets.film_id = films.id
-      GROUP BY title;"
-      numbers = SqlRunner.run(sql)
-      return numbers.values
-    end
+  def Ticket.count_customers()
+    sql = "
+    SELECT films.title, COUNT(Tickets.id)
+    AS NumberOfCustomers From tickets
+    LEFT JOIN films ON Tickets.film_id = films.id
+    GROUP BY title;"
+    numbers = SqlRunner.run(sql)
+    return numbers.values
+  end
 
   def Ticket.all()
     sql = "SELECT * FROM tickets"
